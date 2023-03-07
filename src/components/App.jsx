@@ -1,46 +1,52 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
 import FeedbackOptions from './FeedbackOptions/FeedbackOptions ';
 import Section from './Section/Section';
 import Statistics from './Statistics/Statistics';
 
-export default class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
 
-  onLeaveFeedback = event => {
-    this.setState(prevState => {
+export default function App() {
+    const [good, setGood] = useState(0);
+    const [neutral, setNeutral] = useState(0);
+    const [bad, setBad] = useState(0);
+
+
+    const countTotalFeedback = good + neutral + bad;
+
+    const countPositiveFeedbackPercentage = Math.round(
+      (good / countTotalFeedback) * 100);
+
+
+    const onLeaveFeedback = (event) => {
       const { name } = event.target;
-      return {
-        [name]: prevState[name] + 1,
-      };
-    });
-  };
+      switch (name) {
+        case 'good':
+          setGood(good + 1);
+          break;
 
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
-    return good + neutral + bad;
-  };
+        case 'neutral':
+          setNeutral(neutral + 1);
+          break;
 
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    const total = this.countTotalFeedback();
+        case 'bad':
+          setBad(bad + 1);
+          break;
 
-    return Math.round((good / total) * 100);
-  };
+        default:
+          break;
+      }
 
-  render() {
-    const { good, neutral, bad } = this.state;
+
+    }
+
     return (
       <Layout>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={Object.keys(this.state)}
-            onLeaveFeedback={this.onLeaveFeedback}
+            options={Object.keys({ good, neutral, bad })}
+
+            onLeaveFeedback={onLeaveFeedback}
           />
         </Section>
 
@@ -49,8 +55,8 @@ export default class App extends Component {
             good={good}
             neutral={neutral}
             bad={bad}
-            total={this.countTotalFeedback}
-            positivePercentage={this.countPositiveFeedbackPercentage}
+            total={countTotalFeedback}
+            positivePercentage={countPositiveFeedbackPercentage}
           />
         </Section>
 
@@ -58,4 +64,4 @@ export default class App extends Component {
       </Layout>
     );
   }
-}
+
