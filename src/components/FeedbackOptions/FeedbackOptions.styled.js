@@ -19,6 +19,7 @@ export const Button = styled.button`
   font-size: 24px;
   box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.3);
   &:hover {
+  
     background-color: rgb(28, 185, 236);
     cursor: pointer;
   }
